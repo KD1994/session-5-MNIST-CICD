@@ -1,5 +1,8 @@
 # Simple Neural Network for MNIST
 
+[![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-3810/)  [![Python application](https://github.com/KD1994/session-5-MNIST-CICD/actions/workflows/python-app.yml/badge.svg)](https://github.com/KD1994/session-5-MNIST-CICD/actions/workflows/python-app.yml)  ![Build Status](https://img.shields.io/badge/build-pass-green)
+
+
 This repository contains a simple neural network implemented in PyTorch to classify MNIST digits and a CI/CD pipeline to train the model and push it to the repository.
 
 ## Requirements
