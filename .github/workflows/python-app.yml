@@ -23,13 +23,9 @@ jobs:
     - name: Run tests
       run: |
         pytest tests/
-    - name: Commit and push model
+    - name: Upload model artifact
       if: success()
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add best_model.pth
-        git commit -m "Add trained model"
-        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git HEAD:${{ github.ref }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: best-model
+        path: best_model.pth

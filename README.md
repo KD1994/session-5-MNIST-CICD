@@ -4,7 +4,7 @@ This repository contains a simple neural network implemented in PyTorch to class
 
 ## Requirements
 
-- Python 3.x
+- Python 3.8
 - PyTorch
 - torchvision
 - pytest
