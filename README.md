@@ -106,11 +106,3 @@ The test suite includes various tests to ensure the model's functionality and ro
 - **Noisy Input Test**: Tests the model's robustness to noisy inputs.
 - **Accuracy Test**: Ensures that the model reaches at least 95% accuracy in the first epoch of training on the MNIST dataset.
 
-<<<<<<< HEAD
-### Explanation
-
-The accuracy test is designed to verify that the model can achieve a high level of accuracy quickly. It sets up a data loader for the MNIST dataset, initializes the model, and trains it for one epoch. The test then calculates the accuracy and asserts that it reaches at least 95%. This test helps ensure that the model is effectively learning from the data and performing well.
-
-Note: The accuracy test can be computationally intensive and may vary in results due to factors like random initialization and learning rate. It is recommended to run this test in an environment with sufficient resources.
-=======
->>>>>>> train-tweak
