@@ -13,4 +13,5 @@ mnist_cicd_pipeline.egg-info
 *.png
 *.jpeg
 *.gif
+*.pth
 
