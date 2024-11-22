@@ -1,13 +1,11 @@
-import torch
 import torch.nn as nn
-import torch.nn.functional as F
 from torchinfo import summary
+  
 
-
-class MNIST_1(nn.Module):
+class MnistNet(nn.Module):
     def __init__(self):
         """
-        Initialize the MNIST_1 model.
+        Initialize the MnistNet model.
         Calculate Output Shape: (Height + 2*Padding - dilation*(Kernel_size - 1) - 1) / Stride + 1
         """
         super().__init__()
@@ -56,7 +54,7 @@ class MNIST_1(nn.Module):
     
     def forward(self, x):
         """
-        Forward pass of the MNIST_1 model.
+        Forward pass of the MnistNet model.
         """
         x = self.conv1(x)
         x = self.fc(x)
@@ -69,11 +67,12 @@ def count_parameters(model):
     """
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
-if __name__ == "__main__":
-    """
-    Main function to count the number of parameters in the MNIST_1 model and print the summary.
-    """
-    model = MNIST_1()
-    print(f"Number of parameters: {count_parameters(model)}") 
 
-    summary(model, input_size=(1, 1, 28, 28))
+# if __name__ == "__main__":
+#     """
+#     Main function to count the number of parameters in the MnistNet model and print the summary.
+#     """
+#     model = MnistNet()
+#     print(f"Number of parameters: {count_parameters(model)}") 
+
+#     summary(model, input_size=(1, 1, 28, 28))
