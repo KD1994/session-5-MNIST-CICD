@@ -22,7 +22,7 @@ jobs:
         python train.py
     - name: Run tests
       run: |
-        pytest tests/
+        pytest -v
     - name: Upload model artifact
       if: success()
       uses: actions/upload-artifact@v3
