@@ -1,22 +1,20 @@
 import torch
-import pytest
-from torch import nn, optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
-from src.model import MNIST_1, count_parameters
+from src.model import MnistNet, count_parameters
 
 def test_parameter_count():
     """
     Test that the model has fewer than 25,000 parameters.
     """
-    model = MNIST_1()
+    model = MnistNet()
     assert count_parameters(model) < 25000, "Model has more than 25000 parameters"
 
 def test_input_size():
     """
     Test that the model produces the correct output shape for a 28x28 input.
     """
-    model = MNIST_1()
+    model = MnistNet()
     input_tensor = torch.randn(1, 1, 28, 28)
     output = model(input_tensor)
     assert output.shape == (1, 10), "Output shape is incorrect"
@@ -25,7 +23,7 @@ def test_batch_input():
     """
     Test that the model produces the correct output shape for a batch of inputs.
     """
-    model = MNIST_1()
+    model = MnistNet()
     input_tensor = torch.randn(32, 1, 28, 28)
     output = model(input_tensor)
     assert output.shape == (32, 10), "Output shape for batch input is incorrect"
@@ -34,7 +32,7 @@ def test_gradient_flow():
     """
     Test that the model produces the correct output shape for a batch of inputs.
     """
-    model = MNIST_1()
+    model = MnistNet()
     input_tensor = torch.randn(1, 1, 28, 28, requires_grad=True)
     output = model(input_tensor)
     output[0, 0].backward()
@@ -44,7 +42,7 @@ def test_output_range():
     """
     Test that the model produces probabilities in the range [0, 1].
     """
-    model = MNIST_1()
+    model = MnistNet()
     input_tensor = torch.randn(1, 1, 28, 28)
     output = model(input_tensor)
     
@@ -59,7 +57,7 @@ def test_noisy_input():
     """
     Test that the model produces the correct output shape for a noisy input.
     """
-    model = MNIST_1()
+    model = MnistNet()
     input_tensor = torch.randn(1, 1, 28, 28) + torch.randn(1, 1, 28, 28) * 0.1
     output = model(input_tensor)
     assert output.shape == (1, 10), "Output shape with noisy input is incorrect"
@@ -77,7 +75,7 @@ def test_model_accuracy():
     test_loader = DataLoader(test_dataset, batch_size=64, shuffle=True)
 
     # Initialize the model
-    model = MNIST_1()
+    model = MnistNet()
 
     # Load the best saved model
     model.load_state_dict(torch.load('best_model.pth'))

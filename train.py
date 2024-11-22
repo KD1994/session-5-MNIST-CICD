@@ -4,11 +4,12 @@ from torch import nn
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from torchvision.utils import save_image
-from src.model import MNIST_1
+from torchinfo import summary
+from src.model import MnistNet
 
 def train():
     """
-    Train the MNIST_1 model on the MNIST dataset.
+    Train the MnistNet model on the MNIST dataset.
     """
     transform = transforms.Compose([
         transforms.RandomRotation(10),
@@ -18,47 +19,39 @@ def train():
     ])
 
     train_dataset = datasets.MNIST(root='./data', train=True, download=True, transform=transform)
-    val_dataset = datasets.MNIST(root='./data', train=False, download=True, transform=transform)
     train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
-    val_loader = DataLoader(val_dataset, batch_size=1000, shuffle=False)
     
     # Save a batch of transformed images
     images, _ = next(iter(train_loader))
     save_image(images, 'transformed_batch.jpg')
 
-    model = MNIST_1()
+    model = MnistNet()
+    summary(model, input_size=(1, 1, 28, 28))
     optimizer = optim.Adam(model.parameters(), lr=0.003)
     criterion = nn.CrossEntropyLoss()
 
-    best_accuracy = 0.0
     best_model_path = 'best_model.pth'
 
     model.train()
-    for epoch in range(10):
-        for data, target in train_loader:
-            optimizer.zero_grad()
-            output = model(data)
-            loss = criterion(output, target)
-            loss.backward()
-            optimizer.step()
+    total = 0
+    correct = 0
+    for b_id, (data, target) in enumerate(train_loader):
+        optimizer.zero_grad()
+        output = model(data)
+        pred = output.argmax(dim=1, keepdim=True)
+        loss = criterion(output, target)
+        loss.backward()
+        optimizer.step()
+    
+        total += target.size(0)
+        correct += pred.eq(target.view_as(pred)).sum().item()
 
-        model.eval()
-        correct = 0
-        with torch.no_grad():
-            for data, target in val_loader:
-                output = model(data)
-                pred = output.argmax(dim=1, keepdim=True)
-                correct += pred.eq(target.view_as(pred)).sum().item()
+        if b_id % 100 == 0:
+            print(
+                f"Batch: {b_id}, Loss: {loss.item():.4f}, Accuracy: {100.*correct/total:.2f}%"
+            )
+    torch.save(model.state_dict(), best_model_path)
 
-        accuracy = 100. * correct / len(val_loader.dataset)
-        print(f"Epoch: {epoch+1}, Validation Accuracy: {accuracy:.2f}%")
-
-        if accuracy > best_accuracy:
-            best_accuracy = accuracy
-            torch.save(model.state_dict(), best_model_path)
-            print(f"New best model saved with accuracy: {best_accuracy:.2f}%")
-
-        model.train()
 
 if __name__ == "__main__":
     train() 
