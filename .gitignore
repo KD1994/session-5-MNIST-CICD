@@ -9,8 +9,6 @@ mnist_cicd_pipeline.egg-info
 *.pyc
 *.pyo
 *.pyd
-*.jpg
 *.png
-*.jpeg
 *.gif
 *.pth

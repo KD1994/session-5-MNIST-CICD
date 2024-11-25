@@ -12,8 +12,9 @@ def train():
     Train the MnistNet model on the MNIST dataset.
     """
     transform = transforms.Compose([
-        transforms.RandomRotation(10),
-        transforms.RandomHorizontalFlip(),
+        transforms.RandomRotation((-7.0, 7.0), fill=(1,)),
+        transforms.RandomAffine(degrees=0,  scale=(0.95, 1.05)),
+        transforms.ColorJitter(brightness=0.10, contrast=0.1, saturation=0.10, hue=0.1),
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
     ])

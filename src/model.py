@@ -1,50 +1,35 @@
+import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from torchinfo import summary
   
 
 class MnistNet(nn.Module):
     def __init__(self):
-        """
-        Initialize the MnistNet model.
-        Calculate Output Shape: (Height + 2*Padding - dilation*(Kernel_size - 1) - 1) / Stride + 1
-        """
-        super().__init__()
+        super(MnistNet, self).__init__()
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3),
-            # 28 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 26
+            nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, bias=False),            # 28 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 26
             nn.GELU(),
             nn.BatchNorm2d(8),
-            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3),
-            # 26 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 24
-
-            nn.GELU(),
-            nn.BatchNorm2d(16),
-            # nn.Conv2d(in_channels=16, out_channels=16, kernel_size=3, stride=2, padding=1),
-            # 24 + 2*0 - 1*(2 - 1) - 1 / 2 + 1 = 12
-            nn.MaxPool2d(2),
-            # 24 + 2*0 - 1*(2 - 1) - 1 / 2 + 1 = 12
-
-            nn.GELU(),
-            nn.BatchNorm2d(16),
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3),
-            # 12 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 10
             
+            nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, bias=False),           # 26 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 24
+            nn.GELU(),
+            nn.BatchNorm2d(16),
+            
+            nn.MaxPool2d(2),                                                                # 24 + 2*0 - 1*(2 - 1) - 1 / 2 + 1 = 12
+            
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, bias=False),          # 12 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 10
             nn.GELU(),
             nn.BatchNorm2d(32),
-            nn.MaxPool2d(2),
-            # 10 + 2*0 - 1*(2 - 1) - 1 / 2 + 1 = 5
 
+            nn.MaxPool2d(2),                                                                # 10 + 2*0 - 1*(2 - 1) - 1 / 2 + 1 = 5
+            
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3, bias=False),          # 5 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 3
             nn.GELU(),
             nn.BatchNorm2d(32),
-            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=3),
-            # 5 + 2*0 - 1*(3 - 1) - 1 / 1 + 1 = 3
 
-            nn.GELU(),
-            nn.BatchNorm2d(32),
-            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=2),
-            # 3 + 2*0 - 1*(2 - 1) - 1 / 1 + 1 = 2
+            nn.Conv2d(in_channels=32, out_channels=32, kernel_size=2, bias=False),          # 3 + 2*0 - 1*(2 - 1) - 1 / 1 + 1 = 2
 
-            nn.Dropout2d(0.4),
             nn.Flatten()
         )
 

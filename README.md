@@ -42,55 +42,65 @@ Layer (type:depth-idx)                   Output Shape              Param #
 ==========================================================================================
 MnistNet                                 [1, 10]                   --
 ├─Sequential: 1-1                        [1, 128]                  --
-│    └─Conv2d: 2-1                       [1, 8, 26, 26]            80
+│    └─Conv2d: 2-1                       [1, 8, 26, 26]            72
 │    └─GELU: 2-2                         [1, 8, 26, 26]            --
 │    └─BatchNorm2d: 2-3                  [1, 8, 26, 26]            16
-│    └─Conv2d: 2-4                       [1, 16, 24, 24]           1,168
+│    └─Conv2d: 2-4                       [1, 16, 24, 24]           1,152
 │    └─GELU: 2-5                         [1, 16, 24, 24]           --
 │    └─BatchNorm2d: 2-6                  [1, 16, 24, 24]           32
 │    └─MaxPool2d: 2-7                    [1, 16, 12, 12]           --
-│    └─GELU: 2-8                         [1, 16, 12, 12]           --
-│    └─BatchNorm2d: 2-9                  [1, 16, 12, 12]           32
-│    └─Conv2d: 2-10                      [1, 32, 10, 10]           4,640
-│    └─GELU: 2-11                        [1, 32, 10, 10]           --
-│    └─BatchNorm2d: 2-12                 [1, 32, 10, 10]           64
-│    └─MaxPool2d: 2-13                   [1, 32, 5, 5]             --
-│    └─GELU: 2-14                        [1, 32, 5, 5]             --
-│    └─BatchNorm2d: 2-15                 [1, 32, 5, 5]             64
-│    └─Conv2d: 2-16                      [1, 32, 3, 3]             9,248
-│    └─GELU: 2-17                        [1, 32, 3, 3]             --
-│    └─BatchNorm2d: 2-18                 [1, 32, 3, 3]             64
-│    └─Conv2d: 2-19                      [1, 32, 2, 2]             4,128
-│    └─Dropout2d: 2-20                   [1, 32, 2, 2]             --
-│    └─Flatten: 2-21                     [1, 128]                  --
+│    └─Conv2d: 2-8                       [1, 32, 10, 10]           4,608
+│    └─GELU: 2-9                         [1, 32, 10, 10]           --
+│    └─BatchNorm2d: 2-10                 [1, 32, 10, 10]           64
+│    └─MaxPool2d: 2-11                   [1, 32, 5, 5]             --
+│    └─Conv2d: 2-12                      [1, 32, 3, 3]             9,216
+│    └─GELU: 2-13                        [1, 32, 3, 3]             --
+│    └─BatchNorm2d: 2-14                 [1, 32, 3, 3]             64
+│    └─Conv2d: 2-15                      [1, 32, 2, 2]             4,096
+│    └─Flatten: 2-16                     [1, 128]                  --
 ├─Sequential: 1-2                        [1, 10]                   --
-│    └─Linear: 2-22                      [1, 10]                   1,290
+│    └─Linear: 2-17                      [1, 10]                   1,290
 ==========================================================================================
-Total params: 20,826
-Trainable params: 20,826
+Total params: 20,610
+Trainable params: 20,610
 Non-trainable params: 0
-Total mult-adds (M): 1.29
+Total mult-adds (M): 1.27
 ==========================================================================================
 Input size (MB): 0.00
-Forward/backward pass size (MB): 0.32
+Forward/backward pass size (MB): 0.29
 Params size (MB): 0.08
-Estimated Total Size (MB): 0.40
+Estimated Total Size (MB): 0.38
 ==========================================================================================
 ```
+
+## Data Transformations
+
+```python
+transforms.RandomRotation((-7.0, 7.0), fill=(1,)),
+transforms.RandomAffine(degrees=0,  scale=(0.95, 1.05)),
+transforms.ColorJitter(brightness=0.10, contrast=0.1, saturation=0.10, hue=0.1),
+transforms.ToTensor(),
+transforms.Normalize((0.1307,), (0.3081,))
+```
+
+Sample of transformed images (Batch):
+
+![Data Augmentation](./transformed_batch.jpg)
+
 
 ## Training
 
 ```
-Batch: 0, Loss: 2.4165, Accuracy: 3.12%
-Batch: 100, Loss: 0.3989, Accuracy: 78.96%
-Batch: 200, Loss: 0.2644, Accuracy: 84.95%
-Batch: 300, Loss: 0.3112, Accuracy: 87.67%
-Batch: 400, Loss: 0.2250, Accuracy: 89.20%
-Batch: 500, Loss: 0.1895, Accuracy: 90.39%
-Batch: 600, Loss: 0.0442, Accuracy: 91.12%
-Batch: 700, Loss: 0.3401, Accuracy: 91.71%
-Batch: 800, Loss: 0.1248, Accuracy: 92.18%
-Batch: 900, Loss: 0.1686, Accuracy: 92.61%
+Batch: 0, Loss: 2.3342, Accuracy: 6.25%
+Batch: 100, Loss: 0.2291, Accuracy: 89.81%
+Batch: 200, Loss: 0.0949, Accuracy: 93.07%
+Batch: 300, Loss: 0.1528, Accuracy: 94.49%
+Batch: 400, Loss: 0.0497, Accuracy: 95.18%
+Batch: 500, Loss: 0.0733, Accuracy: 95.67%
+Batch: 600, Loss: 0.0553, Accuracy: 96.02%
+Batch: 700, Loss: 0.0130, Accuracy: 96.32%
+Batch: 800, Loss: 0.0182, Accuracy: 96.55%
+Batch: 900, Loss: 0.0834, Accuracy: 96.75%
 ```
 
 
